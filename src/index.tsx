@@ -8,8 +8,8 @@ import { fetchPlugin } from './plugins/fetch-plugin';
 
 const App = () => {
 	const [input, setInput] = useState('');
-	const [code, setCode] = useState('');
 	const ref = useRef<any>();
+	const iframe = useRef<any>();
 
 	const startService = async () => {
 		// webassembly reference
@@ -27,6 +27,8 @@ const App = () => {
 	const onClick = async () => {
 		if (!ref.current) return;
 
+		iframe.current.srcDoc = html;
+
 		// ESBuild: transpile + bundle
 		const result = await ref.current.build({
 			entryPoints: ['index.js'],
@@ -39,8 +41,32 @@ const App = () => {
 			},
 			plugins: [unpkgPathPlugin(), fetchPlugin(input)],
 		});
-		setCode(result.outputFiles[0].text);
+
+		// post to iframe
+		iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
 	};
+
+	// html and js of iframe with listener of message post
+	const html = `
+	<html>
+		<head></head>
+		<body>
+			<div id="root">
+				<script>
+				window.addEventListener('message', (event)=>{
+						try{
+							eval(event.data)
+						} catch(error) {
+							const root = document.querySelector('#root');
+							root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + error + '</div>';
+							throw error;
+						}
+					}, false)
+				</script>
+			</div>
+		</body>
+	</html>>
+	`;
 
 	return (
 		<div>
@@ -52,7 +78,12 @@ const App = () => {
 			<div>
 				<button onClick={onClick}>Submit</button>
 			</div>
-			<pre>{code}</pre>
+			<iframe
+				title='preview'
+				ref={iframe}
+				srcDoc={html}
+				sandbox='allow-scripts'
+			/>
 		</div>
 	);
 };

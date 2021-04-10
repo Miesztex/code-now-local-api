@@ -1,5 +1,4 @@
 import * as esbuild from 'esbuild-wasm';
-import axios from 'axios';
 import localForage from 'localforage';
 
 const fileCache = localForage.createInstance({
@@ -8,7 +7,6 @@ const fileCache = localForage.createInstance({
 
 (async () => {
 	await fileCache.setItem('color', 'red');
-	const color = await fileCache.getItem('color');
 })();
 
 export const unpkgPathPlugin = () => {

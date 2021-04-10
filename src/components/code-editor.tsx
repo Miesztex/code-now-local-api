@@ -1,5 +1,5 @@
 import MonacoEditor, { OnMount } from '@monaco-editor/react';
-import prettier, { format } from 'prettier';
+import prettier from 'prettier';
 import parser from 'prettier/parser-babel';
 import codeShift from 'jscodeshift';
 import HighLighter from 'monaco-jsx-highlighter';
@@ -7,6 +7,7 @@ import HighLighter from 'monaco-jsx-highlighter';
 import { useRef } from 'react';
 
 import './code-editor.css';
+import './syntax.css';
 
 interface CodeEditorProps {
 	initialValue: string;

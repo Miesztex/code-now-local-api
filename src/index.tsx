@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import * as esbuild from 'esbuild-wasm';
+import CodeEditor from './components/code-editor';
+
+import 'bulmaswatch/superhero/bulmaswatch.min.css';
 
 // unpkg bundling plugin
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
@@ -70,6 +73,10 @@ const App = () => {
 
 	return (
 		<div>
+			<CodeEditor
+				initialValue='const a = 1;'
+				onChange={value => setInput(value)}
+			/>
 			<textarea
 				name=''
 				id=''

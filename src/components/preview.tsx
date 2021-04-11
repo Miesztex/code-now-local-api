@@ -3,6 +3,7 @@ import './preview.css';
 
 interface PreviewProps {
 	code: string;
+	err: string;
 }
 
 // html and js of iframe with listener of message post
@@ -14,13 +15,22 @@ const html = `
 		<body>
 			<div id="root">
 				<script>
+				const handleError = (error) =>{
+					const root = document.querySelector('#root');
+					root.innerHTML = '<div style="color: red;"><h4>Runtime Error</	h4>' + error + '</div>';
+					console.error(error);
+				};
+
+				window.addEventListener('error', event=>{
+					event.preventDefault();
+					handleError(event.error);
+				})
+
 				window.addEventListener('message', (event)=>{
 						try{
 							eval(event.data)
 						} catch(error) {
-							const root = document.querySelector('#root');
-							root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + error + '</div>';
-							throw error;
+							handleError(error)
 						}
 					}, false)
 				</script>
@@ -29,8 +39,9 @@ const html = `
 	</html>
 	`;
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
+const Preview: React.FC<PreviewProps> = ({ code, err }) => {
 	const iframe = useRef<any>();
+
 	useEffect(() => {
 		// reset
 		iframe.current.srcDoc = html;
@@ -39,6 +50,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
 			iframe.current.contentWindow.postMessage(code, '*');
 		}, 50);
 	}, [code]);
+
 	return (
 		<div className='preview-wrapper'>
 			<iframe
@@ -47,6 +59,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
 				srcDoc={html}
 				sandbox='allow-scripts'
 			/>
+			{err && <div className='preview-error'>{err}</div>}
 		</div>
 	);
 };

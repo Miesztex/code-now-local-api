@@ -8,10 +8,12 @@ import Preview from './preview';
 const CodeCell = () => {
 	const [input, setInput] = useState('');
 	const [code, setCode] = useState('');
+	const [err, setErr] = useState('');
 
 	const onInputStop = async () => {
 		const output = await bundle(input);
-		setCode(output);
+		setCode(output.code);
+		setErr(output.err);
 	};
 
 	useEffect(() => {
@@ -32,7 +34,7 @@ const CodeCell = () => {
 						onChange={value => setInput(value)}
 					/>
 				</Resizable>
-				<Preview code={code} />
+				<Preview code={code} err={err} />
 			</div>
 		</Resizable>
 	);

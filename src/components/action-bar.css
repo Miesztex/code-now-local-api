@@ -1,0 +1,12 @@
+.action-bar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 20;
+	opacity: 0.6;
+	transition: all 0.4s;
+}
+
+.cell-list-item:hover .action-bar {
+	opacity: 0.9;
+}

@@ -49,7 +49,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
 			className='resize-horizontal'
 			height={Infinity}
 			width={width}
-			maxConstraints={[innerWidth * 0.75, Infinity]}
+			maxConstraints={[innerWidth * 0.9, Infinity]}
 			minConstraints={[innerWidth * 0.2, Infinity]}
 			resizeHandles={['e']}
 			onResizeStop={(_, data) => setWidth(data.size.width)}>

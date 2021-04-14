@@ -3,7 +3,7 @@ import './preview.css';
 
 interface PreviewProps {
 	code: string;
-	err: string;
+	error: string;
 }
 
 // html and js of iframe with listener of message post
@@ -39,7 +39,7 @@ const html = `
 	</html>
 	`;
 
-const Preview: React.FC<PreviewProps> = ({ code, err }) => {
+const Preview: React.FC<PreviewProps> = ({ code, error }) => {
 	const iframe = useRef<any>();
 
 	useEffect(() => {
@@ -59,7 +59,7 @@ const Preview: React.FC<PreviewProps> = ({ code, err }) => {
 				srcDoc={html}
 				sandbox='allow-scripts'
 			/>
-			{err && <div className='preview-error'>{err}</div>}
+			{error && <div className='preview-error'>{error}</div>}
 		</div>
 	);
 };

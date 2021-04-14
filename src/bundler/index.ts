@@ -25,12 +25,12 @@ const bundle = async (rawCode: string) => {
 
 		return {
 			code: result.outputFiles[0].text,
-			err: '',
+			error: '',
 		};
-	} catch (err) {
+	} catch (error) {
 		return {
 			code: '',
-			err: err.message,
+			error: error.message,
 		};
 	}
 };
